@@ -4,11 +4,10 @@ import com.cursojava.projetowebservice.entities.User;
 import com.cursojava.projetowebservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -45,6 +44,15 @@ public class UserResource {
     public ResponseEntity<User> findById(@PathVariable Long id){ // Recebe o id da url
         User user = service.findUserById(id);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<User> insert(@RequestBody User obj){ // Indica que esse objeto vai desseralizado para um User
+        obj = service.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj); // HTTPS 201 precisa usar o created() que retorna um tipo URI
+
+
     }
 
 
