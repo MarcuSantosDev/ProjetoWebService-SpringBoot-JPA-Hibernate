@@ -1,116 +1,116 @@
 # ProjetoWebService
 
-**RESTful API de e-commerce desenvolvida com Java e Spring Boot**, com foco no gerenciamento de usuários, produtos, categorias e pedidos.
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-25-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Spring_Boot-4.1.2-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Hibernate-ORM-59666C?style=for-the-badge&logo=hibernate&logoColor=white" />
+  <img src="https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" />
+</p>
 
-O projeto foi desenvolvido com o objetivo de aplicar conceitos de desenvolvimento back-end, arquitetura em camadas, persistência de dados e mapeamento objeto-relacional (ORM) utilizando Spring Data JPA e Hibernate.
+**RESTful API de e-commerce** desenvolvida com Java e Spring Boot para gerenciamento de usuários, produtos, categorias e pedidos.
 
-## Tecnologias utilizadas
+Projeto desenvolvido para praticar desenvolvimento back-end, arquitetura em camadas, persistência de dados e mapeamento objeto-relacional com JPA e Hibernate.
 
-- **Java 25**
-- **Spring Boot 4.1.2**
-  - Spring Web MVC
-  - Spring Data JPA
-  - H2 Console
-- **Hibernate** — Mapeamento objeto-relacional (ORM)
-- **Banco de dados:** H2 e PostgreSQL
-- **Maven** — Gerenciamento de dependências e build
+---
 
-## Arquitetura do projeto
+## Tecnologias
 
-A aplicação utiliza o padrão de arquitetura em camadas (*Layered Architecture*), separando as responsabilidades para facilitar a organização, manutenção e evolução do código.
+| Tecnologia | Utilização |
+|---|---|
+| Java 25 | Linguagem de programação |
+| Spring Boot 4.1.2 | Framework back-end |
+| Spring Web MVC | Desenvolvimento de APIs REST |
+| Spring Data JPA | Persistência de dados |
+| Hibernate | ORM |
+| PostgreSQL | Banco de dados relacional |
+| H2 | Banco de dados para desenvolvimento e testes |
+| Maven | Gerenciamento de dependências |
+
+## Arquitetura
+
+O projeto utiliza **Layered Architecture (Arquitetura em Camadas)**, separando as responsabilidades da aplicação.
 
 ```text
 com.cursojava.projetowebservice
 │
-├── entities/             # Entidades e modelos de domínio
-│   └── pk/               # Chaves primárias compostas
-│
-├── enums/                # Enumerações do sistema
-│
-├── repositories/         # Acesso e persistência de dados
-│
-├── services/             # Regras de negócio
-│   └── exceptions/       # Exceções da camada de serviço
-│
-└── resources/            # Controllers e endpoints REST
-    └── exceptions/       # Tratamento global de exceções
+├── entities/
+│   └── pk/
+├── enums/
+├── repositories/
+├── services/
+│   └── exceptions/
+└── resources/
+    └── exceptions/
 ```
 
-**Fluxo de uma requisição:**
+**Fluxo da aplicação:**
 
-`Resource (Controller) → Service → Repository → Database`
+`Controller → Service → Repository → Database`
 
-Cada camada possui uma responsabilidade específica:
-
-- **Resource:** recebe as requisições HTTP e retorna as respostas da API.
-- **Service:** concentra as regras de negócio e coordena as operações.
-- **Repository:** realiza o acesso e a persistência dos dados.
-- **Entities:** representam as entidades do domínio e seus relacionamentos.
+| Camada | Responsabilidade |
+|---|---|
+| Resources | Recebimento e resposta das requisições HTTP |
+| Services | Regras de negócio |
+| Repositories | Acesso e persistência de dados |
+| Entities | Representação das entidades do domínio |
 
 ## Modelo de domínio
 
-O sistema possui as seguintes entidades e relacionamentos:
+Principais entidades e relacionamentos:
 
-| Relacionamento | Descrição |
-|---|---|
-| User 1:N Order | Um usuário pode possuir vários pedidos. |
-| Order 1:N OrderItem | Um pedido pode possuir vários itens. |
-| Order 1:1 Payment | Um pedido possui no máximo um pagamento. |
-| Product N:N Category | Um produto pode pertencer a várias categorias, e uma categoria pode possuir vários produtos. |
-| Order N:N Product | Relacionamento realizado por meio da entidade OrderItem, que contém quantidade e preço. |
+- **User:** representa os usuários da aplicação.
+- **Order:** representa os pedidos realizados.
+- **OrderItem:** representa os produtos associados a cada pedido.
+- **Product:** representa os produtos disponíveis.
+- **Category:** representa as categorias dos produtos.
+- **Payment:** representa o pagamento de um pedido.
 
-### Principais tabelas
-
-- `tb_user`
-- `tb_order`
-- `tb_order_item`
-- `tb_payment`
-- `tb_product`
-- `tb_category`
-- `tb_product_category`
-
-**Observações:**
-
-- O relacionamento entre produtos e categorias utiliza a tabela intermediária `tb_product_category`.
-- A entidade `OrderItem` utiliza uma chave primária composta (`OrderItemPK`).
-- O status dos pedidos é representado pela enumeração `OrderStatus` e armazenado como inteiro no banco de dados.
-
-## Diagrama UML
-
-O diagrama abaixo representa o modelo de domínio da aplicação, apresentando as entidades, seus atributos e os relacionamentos existentes entre elas.
+### Diagrama UML
 
 ![Diagrama UML do ProjetoWebService](docs/uml-projetowebservice.png)
 
-## Endpoints da API
+### Relacionamentos
 
-### Usuários — `/users`
+| Relacionamento | Cardinalidade |
+|---|---|
+| User → Order | 1:N |
+| Order → OrderItem | 1:N |
+| Order → Payment | 1:1 |
+| Product ↔ Category | N:N |
+| Order ↔ Product | N:N, por meio de OrderItem |
 
-| Método | Endpoint | Descrição | Resposta |
-|---|---|---|---|
-| GET | `/users` | Lista todos os usuários. | 200 OK |
-| GET | `/users/{id}` | Busca um usuário pelo ID. | 200 / 404 |
-| POST | `/users` | Cadastra um novo usuário. | 201 Created |
-| PUT | `/users/{id}` | Atualiza nome, e-mail e telefone. | 200 / 404 |
-| DELETE | `/users/{id}` | Remove um usuário. | 204 / 404 / 400 |
+**Detalhes da modelagem:**
+- `OrderItem` utiliza chave primária composta (`OrderItemPK`).
+- `tb_product_category` representa a associação entre produtos e categorias.
+- `OrderStatus` representa os estados possíveis de um pedido.
 
-### Produtos, pedidos e categorias
+## Endpoints
+
+### Users
 
 | Método | Endpoint | Descrição |
 |---|---|---|
-| GET | `/products` | Lista todos os produtos. |
-| GET | `/products/{id}` | Busca um produto pelo ID. |
-| GET | `/orders` | Lista todos os pedidos. |
-| GET | `/orders/{id}` | Busca um pedido pelo ID, incluindo itens, pagamento e total. |
-| GET | `/categories` | Lista todas as categorias. |
-| GET | `/categories/{id}` | Busca uma categoria pelo ID. |
+| GET | `/users` | Lista usuários |
+| GET | `/users/{id}` | Busca usuário por ID |
+| POST | `/users` | Cadastra usuário |
+| PUT | `/users/{id}` | Atualiza usuário |
+| DELETE | `/users/{id}` | Remove usuário |
 
-## Exemplos de requisições
+### Products, Orders e Categories
 
-### Cadastro de usuário
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/products` | Lista produtos |
+| GET | `/products/{id}` | Busca produto por ID |
+| GET | `/orders` | Lista pedidos |
+| GET | `/orders/{id}` | Busca pedido por ID |
+| GET | `/categories` | Lista categorias |
+| GET | `/categories/{id}` | Busca categoria por ID |
 
-**POST** `/users`
+## Exemplo de requisição
 
-Content-Type: `application/json`
+**Cadastrar usuário — `POST /users`**
 
 ```json
 {
@@ -123,102 +123,60 @@ Content-Type: `application/json`
 
 ## Tratamento de exceções
 
-A aplicação utiliza `@ControllerAdvice` para centralizar o tratamento de exceções e padronizar as respostas de erro da API.
+O tratamento global é realizado com `@ControllerAdvice`, centralizando as exceções e padronizando as respostas por meio de `StandardError`.
 
-A classe `ResourceExceptionHandler` intercepta exceções específicas e retorna informações estruturadas por meio da classe `StandardError`.
+| Exceção | HTTP Status |
+|---|---|
+| `ResourceNotFoundException` | 404 Not Found |
+| `DatabaseException` | 400 Bad Request |
 
-| Exceção | Status HTTP | Descrição |
-|---|---|---|
-| `ResourceNotFoundException` | 404 Not Found | Recurso não encontrado. |
-| `DatabaseException` | 400 Bad Request | Erro relacionado à operação no banco de dados. |
+## Como executar
 
-**Exemplo de resposta de erro:**
+**Pré-requisitos:** JDK 25, Maven 3.9+ e banco de dados H2 ou PostgreSQL.
 
-```json
-{
-  "timestamp": "2026-11-04T18:30:00Z",
-  "status": 404,
-  "error": "Resource not found",
-  "message": "Resource not found. ID: 99",
-  "path": "/users/99"
-}
-```
-
-## Como executar o projeto
-
-### Pré-requisitos
-
-- JDK 25 ou superior compatível com a configuração do projeto.
-- Maven 3.9 ou superior.
-- Banco de dados H2 ou PostgreSQL, conforme o perfil de execução configurado.
-
-### 1. Clone o repositório
+**1. Clone o repositório**
 
 ```bash
 git clone <url-do-repositorio>
 ```
 
-### 2. Acesse o diretório
+**2. Entre no diretório**
 
 ```bash
 cd projetoweb-service
 ```
 
-### 3. Execute a aplicação
+**3. Execute a aplicação**
 
-Caso o projeto possua Maven Wrapper:
-
-**Windows:**
+Windows:
 
 ```bash
 mvnw.cmd spring-boot:run
 ```
 
-**Linux/macOS:**
+Linux/macOS:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Ou, caso tenha o Maven instalado:
+Ou utilizando Maven instalado:
 
 ```bash
 mvn spring-boot:run
 ```
 
-A aplicação estará disponível em:
+A aplicação estará disponível em `http://localhost:8080`.
 
-`http://localhost:8080`
+### Banco de dados
 
-## Configuração do banco de dados
+As configurações de conexão devem ser definidas em `application.properties` ou nos arquivos específicos de cada profile.
 
-O projeto possui dependências para utilização dos bancos de dados H2 e PostgreSQL.
+O Hibernate utiliza `spring.jpa.hibernate.ddl-auto=update` para atualizar a estrutura das tabelas com base nas entidades mapeadas, quando essa configuração está habilitada.
 
-A configuração da conexão deve ser realizada no arquivo `application.properties` ou nos arquivos específicos dos perfis da aplicação.
+**H2 Console:** `http://localhost:8080/h2-console` (quando habilitado).
 
-O Hibernate utiliza a configuração `spring.jpa.hibernate.ddl-auto=update` para atualizar a estrutura das tabelas com base nas entidades mapeadas, quando configurado dessa forma.
-
-### H2 Console
-
-Quando habilitado e configurado, o console do H2 pode ser acessado em:
-
-`http://localhost:8080/h2-console`
-
-A URL JDBC deve corresponder à configuração definida nas propriedades da aplicação.
-
-## Objetivos de aprendizagem
-
-Este projeto permite praticar conceitos importantes do desenvolvimento back-end com Java:
-
-- Desenvolvimento de APIs REST.
-- Arquitetura em camadas.
-- Programação orientada a objetos.
-- Mapeamento objeto-relacional com JPA e Hibernate.
-- Relacionamentos entre entidades.
-- Persistência de dados com Spring Data JPA.
-- Tratamento global de exceções.
-- Integração com bancos de dados relacionais.
-- Operações CRUD e manipulação de requisições HTTP.
+---
 
 ## Autor
 
@@ -226,4 +184,4 @@ Este projeto permite praticar conceitos importantes do desenvolvimento back-end 
 
 Desenvolvedor Back-End | Java | Spring Boot
 
-[GitHub](https://github.com/MarcuSantosDev)
+[![GitHub](https://img.shields.io/badge/GitHub-MarcuSantosDev-181717?style=flat&logo=github)](https://github.com/MarcuSantosDev)
